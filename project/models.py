@@ -1,16 +1,4 @@
-import os
-from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-
-# Configurations
-app_settings = os.getenv('APP_SETTINGS')
-app.config.from_object(app_settings)
-
-# Database
-db = SQLAlchemy(app)
-
+from project import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -21,13 +9,3 @@ class User(db.Model):
     def __init__(self, username, email):
         self.username = username
         self.email = email
-
-
-@app.route('/', methods=['GET'])
-def ping_pong():
-    return jsonify({
-        'working': 'yes!!',
-    })
-
-
-

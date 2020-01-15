@@ -1,7 +1,9 @@
 version: "3.6"
+
 services:
+  
   base:
-    container_name: surittec-backend
+    container_name: surittec_backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,3 +14,19 @@ services:
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/surittec_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/surittec_test
+    depends_on:
+        - db
+
+  db:
+    container_name: surittec_backend_db
+    build:
+      context: ./project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
