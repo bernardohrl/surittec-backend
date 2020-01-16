@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from project.api.models import User
 from project import db
 from sqlalchemy import exc
+import psycopg2
+
 
 users_blueprint = Blueprint('users', __name__)
 
@@ -37,3 +39,23 @@ def post_user():
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify({'message': 'Invalid payload.', 'error': str(e)}), 400
+
+
+
+@users_blueprint.route('/users/<user_id>', methods=['GET'])
+def get_user(user_id):
+    try:
+        user = User.query.filter_by(id=user_id).first()
+
+        if not user:
+            return jsonify({ 'message': 'User does not exist.' }), 404
+
+        response_object = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }
+        return jsonify(response_object), 200
+    
+    except exc.DataError as e:
+        return jsonify({ 'message': 'User does not exist.', 'error': str(e) }), 404
