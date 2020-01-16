@@ -5,6 +5,14 @@ from project.api.models import User
 from project.tests.base import BaseTestCase
 
 
+def add_user(username, email, password):
+    user = User(username=username, email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
+
 class TestPostUserService(BaseTestCase):
 
     def test_hello_world(self):
@@ -90,10 +98,8 @@ class TestPostUserService(BaseTestCase):
 class TestGetUserService(BaseTestCase):
 
     def test_get_user(self):
-        user = User(username='bernardohrl', email='bernardohrl@gmail.com', password="senha")
-        db.session.add(user)
-        db.session.commit()
-        
+        user = add_user('bernardohrl', 'bernardohrl@gmail.com', "senha")
+
         with self.client:
             response = self.client.get(f'/users/{user.id}')
             data = json.loads(response.data.decode())
@@ -118,6 +124,26 @@ class TestGetUserService(BaseTestCase):
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 404)
             self.assertIn('User does not exist.', data['message'])
+
+
+
+class TestGetUsersService(BaseTestCase):
+
+    def test_get_users(self):
+        add_user('bernardohrl', 'bernardohrl@gmail.com', 'senha')
+        add_user('henrique', 'henrique@gmail.com', 'senha')
+        
+        with self.client:
+            response = self.client.get('/users')
+            data = json.loads(response.data.decode())
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(data['users']), 2)
+
+            self.assertIn('bernardohrl', data['users'][0]['username'])
+            self.assertIn('bernardohrl@gmail.com', data['users'][0]['email'])
+            self.assertIn('henrique', data['users'][1]['username'])
+            self.assertIn('henrique@gmail.com', data['users'][1]['email'])
 
 
 if __name__ == '__main__':
