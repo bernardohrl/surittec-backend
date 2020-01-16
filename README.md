@@ -17,10 +17,12 @@ http://localhost:5000/
 
 ### Configurando o Banco de Dados Local
 
-Agora iremos configurar o Banco de Dados da aplicação, com o container rodando, execute:
+Agora iremos configurar o Banco de Dados da aplicação, com o container rodando, execute os comandos para criar o banco e populá-lo, respectivamente:
 
 ```
 docker-compose run base python manage.py recreatedb
+docker-compose run base python manage.py seed
+
 ```
 
 Para acessá-lo, utilize o comando: 
