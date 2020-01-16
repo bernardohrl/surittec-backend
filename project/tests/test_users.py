@@ -138,12 +138,12 @@ class TestGetUsersService(BaseTestCase):
             data = json.loads(response.data.decode())
 
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(data['users']), 2)
+            self.assertEqual(len(data), 2)
 
-            self.assertIn('bernardohrl', data['users'][0]['username'])
-            self.assertIn('bernardohrl@gmail.com', data['users'][0]['email'])
-            self.assertIn('henrique', data['users'][1]['username'])
-            self.assertIn('henrique@gmail.com', data['users'][1]['email'])
+            self.assertIn('bernardohrl', data[0]['username'])
+            self.assertIn('bernardohrl@gmail.com', data[0]['email'])
+            self.assertIn('henrique', data[1]['username'])
+            self.assertIn('henrique@gmail.com', data[1]['email'])
 
 
 if __name__ == '__main__':

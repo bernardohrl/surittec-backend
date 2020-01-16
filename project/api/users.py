@@ -56,6 +56,12 @@ def get_user(user_id):
             'email': user.email
         }
         return jsonify(response_object), 200
-    
+
     except exc.DataError as e:
         return jsonify({ 'message': 'User does not exist.', 'error': str(e) }), 404
+
+
+
+@users_blueprint.route('/users', methods=['GET'])
+def get_all_users():
+    return jsonify( [user.to_json() for user in User.query.all()] ), 200
