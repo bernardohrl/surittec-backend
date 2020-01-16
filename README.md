@@ -17,7 +17,7 @@ http://localhost:5000/
 
 ### Configurando o Banco de Dados Local
 
-Agora iremos configurar o Banco de Dados da aplicação.
+Agora iremos configurar o Banco de Dados da aplicação, com o container rodando, execute:
 
 ```
 docker-compose run base python manage.py recreatedb
@@ -27,4 +27,13 @@ Para acessá-lo, utilize o comando:
 
 ```
 docker-compose exec db psql -U postgres
+```
+
+
+### Testando 
+
+Com o container rodando, execute:
+
+```
+sudo docker-compose run base python manage.py test
 ```
